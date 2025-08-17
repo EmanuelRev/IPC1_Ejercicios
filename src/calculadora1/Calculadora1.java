@@ -20,7 +20,7 @@ public class Calculadora1 {
         
         
         A = Integer.parseInt(JOptionPane.showInputDialog("Ingrese Primer Numero "));
-        B = Integer.parseInt(JOptionPane.showInputDialog("Ingrese Segundo Numero"));
+        B = Integer.parseInt(JOptionPane.showInputDialog("Ingrese Segundo Numero O Elevacion del Primer Numero"));
         
         operacion = JOptionPane.showInputDialog(
     "Seleccione la una operación:\n" +
@@ -28,7 +28,7 @@ public class Calculadora1 {
     "2 - Resta\n" +
     "3 - Multiplicación\n" +
     "4 - División\n" +
-    "5 - Potencia (a^b)\n" +
+    "5 - Potencia del Primer Numero\n" +
     "6 - Raíz cuadrada del Primer Numero\n" +
     "7 - Salir"
 ).charAt(0);
@@ -46,6 +46,9 @@ public class Calculadora1 {
           case '4': division = A/B;
            JOptionPane.showMessageDialog(null,"La Division es: "+division);
           break;
+          case '5':
+                JOptionPane.showMessageDialog(null,"La Potencia es: " + Math.pow(A, B));
+                break;
          case '6':
              
     if (A >= 0) {
@@ -54,6 +57,10 @@ public class Calculadora1 {
         JOptionPane.showMessageDialog(null, "Error: número negativo.");
     }
     break;
+    case '7':
+                JOptionPane.showMessageDialog(null,"Saliendo de la calculadora...");
+                System.exit(0);
+                break;
           default: JOptionPane.showMessageDialog(null,"Error Al Ingresar Datos"); break;
           
        
