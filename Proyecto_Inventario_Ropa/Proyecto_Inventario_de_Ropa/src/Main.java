@@ -1,14 +1,21 @@
 import java.util.Scanner;
 public class Main {
+    Scanner scanner = new Scanner(System.in);
+    boolean salir = false;
+    int opcion;
+
+    Producto[] inventario =new Producto[100];
+    int contadorProductos = 0;
+
      public static void main(String[] args) {
 
          Scanner scanner = new Scanner(System.in);
          boolean salir = false;
 
-         int opcion;
+         int opcion ;
          while (!salir) {
          //Solo Menu
-             System.out.println("-----Sistema de Inventario de Ropa ER-----");
+             System.out.println("----Sistema de Inventario de Ropa TK----");
              System.out.println("---Menu Principal---");
              System.out.println("SELECCIONE UNA OPCION PARA INICIAR");
              System.out.println("1. Agregar Producto");
@@ -20,8 +27,7 @@ public class Main {
              System.out.println("7. Bitacora");
              System.out.println("8. Salir");
 
-             scanner.close();
-         }
+
              opcion = scanner.nextInt();
              scanner.nextLine();
              switch (opcion) {
@@ -54,13 +60,17 @@ public class Main {
                      //
                      break;
                  case 8:
-                     System.out.println("n-> Opcion: Salir");
-                     //
+                     salir = true ;
+                     System.out.println("Cerrando del Sistenam");
                      break;
+                 default:
+                     System.out.println("Operacion no  Valida,Por favor Elija Nuevamente");
+
+             }
+
 
          }
-
-
+             scanner.close();
 
          }
 
