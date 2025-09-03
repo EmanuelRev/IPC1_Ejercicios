@@ -1,5 +1,6 @@
 import java.util.Scanner;
 public class Main {
+
     Scanner scanner = new Scanner(System.in);
     boolean salir = false;
     int opcion;
@@ -32,7 +33,7 @@ public class Main {
              scanner.nextLine();
              switch (opcion) {
                  case 1:
-                     System.out.println("n-> Opcion: Agregar Producto");
+                     contadorProductos = agregarProducto(inventario, contadorProductos);
                              //
                      break;
                  case 2:
@@ -74,8 +75,64 @@ public class Main {
 
          }
 
+         public static int agregarProducto(Producto[] inventario, int contadorProductos) {
+         Scanner scanner = new Scanner(System.in);
+
+         System.out.println(" --Agregar Nuevo Producto--");
+         System.out.println("Ingrese el Nombre del Producto: ");
+         String nombre = scanner.nextLine();
+
+         System.out.println("Ingrese la categoria: ");
+         String categoria = scanner.nextLine();
+
+         double precio = 0;
+         while (true) {
+             System.out.print("Ingrese el precio:");
+             try {
+                 precio = scanner.nextDouble();
+                 if (precio <= 0 ) {
+                     System.out.println("Error: El precio debe ser positivo.");
+                  continue;
+                 }
+                 break;
+             }catch (Exception e) {
+                 System.out.println("Error: Ingrese un valor numerico valido");
+                 scanner.nextLine();
+             }
+         }
+         int cantidad = 0;
+         while (true){
+             System.out.println("Ingrese la Cantidad en Alamacen: ");
+             try{
+                 cantidad = scanner.nextInt();
+                 if (cantidad < 0 ) {
+                     System.out.println("Error: La cantidad debe ser mayor a cero y un valor numerico.");
+                     continue;
+
+                 }
+                 break;
+             }catch (Exception e) {
+                  System.out.println("Error: Ingrese un valor numerico valido.");
+                  scanner.nextLine();
+             }
+         }
+         scanner.nextLine();
+         System.out.print("Ingrese el Codigo del Producto: ");
+         String codigo = scanner.nextLine();
+
+         for (int i = 0; i < contadorProductos; i++){
+             System.out.println("Error: El codigo '" + codigo + "'ya existe. No se puede usar para el Producto: ");
+             return contadorProductos;
+
+         }
+         } //aqui termina
+           Producto nuevoProducto = new Producto(nombre, categoria, precio, cantidad, codigo);
+           inventario[contadorProductos] = nuevoProducto;
+           System.out.println("Producto '" + nombre +"' Producto Agregado");
+
+           return contadorProductos + 1;
+
+  }
 
 }
-
-
 
