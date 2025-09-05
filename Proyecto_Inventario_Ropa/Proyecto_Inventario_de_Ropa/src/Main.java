@@ -1,12 +1,9 @@
 import java.util.Scanner;
 public class Main {
 
-    Scanner scanner = new Scanner(System.in);
-    boolean salir = false;
-    int opcion;
+    static Producto[] inventario = new Producto[100];
+    static int contadorProductos = 0;
 
-    Producto[] inventario =new Producto[100];
-    int contadorProductos = 0;
 
      public static void main(String[] args) {
 
@@ -37,11 +34,11 @@ public class Main {
                              //
                      break;
                  case 2:
-                     System.out.println("n-> Opcion: Buscar Producto");
+                     buscarProducto(inventario, contadorProductos);
                      //
                      break;
                  case 3:
-                     System.out.println("n-> Opcion: Eliminar Producto");
+                     contadorProductos = eliminarProducto(inventario , contadorProductos);
                      //
                      break;
                  case 4:
@@ -124,15 +121,122 @@ public class Main {
              System.out.println("Error: El codigo '" + codigo + "'ya existe. No se puede usar para el Producto: ");
              return contadorProductos;
 
-         }
-         } //aqui termina
+           }
+
+
+         //aqui termina
            Producto nuevoProducto = new Producto(nombre, categoria, precio, cantidad, codigo);
            inventario[contadorProductos] = nuevoProducto;
            System.out.println("Producto '" + nombre +"' Producto Agregado");
 
            return contadorProductos + 1;
+         }
+         public static void buscarProducto(Producto[] inventario, int contadorProductos){
+             Scanner scanner = new Scanner(System.in);
 
-  }
+             System.out.println("-- Buscar Producto --");
+             System.out.println("1. Buscar por noimbre");
+             System.out.println("2. Buscar por categoria");
+             System.out.println("3. Buscar por codigo");
+             System.out.print("Selecione una Opcion para inicias la busqueda: ");
+
+             int criterio = scanner.nextInt();
+             scanner.nextLine();
+
+             System.out.print("Ingrese un termino para la busqueda: ");
+             String termino = scanner.nextLine().toLowerCase();
+
+             boolean encontrado = false;
+
+             System.out.println("Resultados de Busqueda: ");
+
+             for(int i = 0; i < contadorProductos; i++ ) {
+                 if(inventario[i] != null ) {
+                 boolean coincide = false;
+
+                 switch (criterio) {
+                     case 1:
+                         coincide = inventario[i].nombre.toLowerCase().contains(termino);
+                         break;
+
+                     case 2:
+                         coincide = inventario[i].categoria.toLowerCase().contains(termino);
+                         break;
+
+                      case 3;
+                          coincide = inventario[i].codigounico.toLowerCase().contains(termino);
+                          break;
+
+                     default:
+                         System.out.println("Opción de Busqueda no válida.");
+                         return;
+                 }
+                 if (coincide) {
+                     System.out.println("Nombre: " + inventario[i].nombre);
+                     System.out.println("Nombre: " + inventario[i].categoria);
+                     System.out.println("Nombre: " + inventario[i].precio);
+                     System.out.println("Nombre: " + inventario[i].cantidad);
+                     System.out.println("Nombre: " + inventario[i].codigounico);
+                     encontrado = true;
+
+                 }
+                 }
+             }
+                  if (!encontrado) {
+                      System.out.println("No se Encontraron Productos.");
+                  }
+         }
+                  public static int eliminarProducto(Producto[] inventario, int contadorProductos){
+
+                  Scanner scanner = new Scanner(System.in);
+
+                  System.out.println("--Eliminar Productos");
+                  System.out.println("Ingrese codigo de producto que desea eliminar: ");
+                  String codigo = scanner.nextLine();
+
+                  boolean encontrado = false;
+                  int indice = -1;
+
+                  for (int i = 0; i < contadorProductos; i++) {
+                      if (inventario[i] != null && inventario[i].codigounico.equalsIgnoreCase(codigo)) {
+                          encontrado = true;
+                          indice = i;
+                          break;
+                      }
+                  }
+                  if (!encontrado) {
+                      System.out.println("Error: Producto no encontrado. '" + codigo +"'.");
+                      return  contadorProductos;
+
+                  }
+                   System.out.println("Producto Seleccionado");
+                   System.out.println("Nombre: " + inventario[indice].nombre);
+                   System.out.println("Categoria: " + inventario[indice].categoria);
+                   System.out.println("Precio: " + inventario[indice].precio);
+                   System.out.println("Cantidad: " + inventario[indice].cantidad);
+                   System.out.println("Codigo: " + inventario[indice].codigounico);
+
+                   System.out.println(" ¿Desea Eliminar el Producto del Sistema? ");
+                   String confirmacion = scanner.nextLine();
+
+                   if (confirmacion.equalsIgnoreCase("s")) {
+
+                       for (int i = indice; i < contadorProductos - 1; i++) {
+                           inventario[i] = inventario[i + 1];
+
+                       }
+                       inventario[contadorProductos -1] = null;
+
+                       System.out.println("Producto Eliminado del Sistema Exitosamente.");
+                       return  contadorProductos - 1;
+
+
+                      }else {
+                       System.out.println("Operacion Canelada. ");
+                       return  contadorProductos;
+
+                      }
+                  }
 
 }
 
