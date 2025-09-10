@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 public class Main {
 
@@ -11,6 +14,9 @@ public class Main {
          boolean salir = false;
 
          int opcion ;
+
+         contadorProductos = cargarInventario(inventario); // para guardar los archivos....
+
          while (!salir) {
          //Solo Menu
              System.out.println("----Sistema de Inventario de Ropa TK----");
@@ -32,33 +38,42 @@ public class Main {
                  case 1:
                      contadorProductos = agregarProducto(inventario, contadorProductos);
                              //
+                     guardarInventario(inventario, contadorProductos);
                      break;
                  case 2:
                      buscarProducto(inventario, contadorProductos);
                      //
+
                      break;
                  case 3:
                      contadorProductos = eliminarProducto(inventario , contadorProductos);
                      //
+                     guardarInventario(inventario, contadorProductos);
                      break;
                  case 4:
                      System.out.println("n-> Opcion: Registrar Venta");
                      //
+
                      break;
                  case 5:
                      System.out.println("n-> Opcion: Generar Reportes");
                      //
+
                      break;
                  case 6:
                      System.out.println("n-> Opcion: Ver Datos del Estudiante");
                      //
+
                      break;
                  case 7:
                      System.out.println("n-> Opcion: Bitacora ");
                      //
+
                      break;
                  case 8:
                      salir = true ;
+                     guardarInventario(inventario, contadorProductos);
+
                      System.out.println("Cerrando del Sistenam");
                      break;
                  default:
@@ -236,6 +251,81 @@ public class Main {
                        return  contadorProductos;
 
                       }
+                  }
+                  public static int cargarInventario(Producto[] inventario) {
+                     int contador = 0;
+                      File archivo = new File("inventario.txt");
+
+                      if(!archivo.exists()){
+                          System.out.println("No se encontro  ningun archivo del inventario, Se creara  un archivo. ");
+                            return  0;
+
+                      }
+                      try (Scanner fileScanner = new Scanner(archivo)) {
+                          while (fileScanner.hasNextLine() && contador < inventario.length) {
+                              String linea = fileScanner.nextLine();
+                              String[] datos = linea.split("//");
+
+                              if (datos.length == 5) {
+                                  String nombre = datos[0];
+                                  String categoria = datos[1];
+                                  double precio = Double.parseDouble(datos[2]);
+                                  int cantidad = Integer.parseInt(datos[3]);
+                                  String codigo = datos[4];
+
+                                  inventario[contador] = new Producto(nombre, categoria , precio, cantidad, codigo);
+                                  contador++;
+
+
+                              }
+                          }
+                          System.out.print("Datos del Inventario creados exitosamente. " + contador + "Producots encontrados. ") ;
+
+                      } catch (IOException e) {
+                          System.out.println("Error al cargar datos del inventario: " + e.getMessage());
+
+                      }
+                      return  contador;
+
+                  }
+                  public static void guardarInventario(Producto[] inventario, int contadorProductos) {
+                    try {
+                        FileWriter writer = new FileWriter("inventario.txt");
+                        for (int i = 0; i < contadorProductos; i++) {
+                            if (inventario[i] != null) {
+                                writer.write(inventario[i].nombre + "|" + inventario[i].categoria + "|" + inventario[i].precio + "|" + inventario[i].cantidad + "|" + inventario[i].codigounico + "/n");
+
+                            }
+                        }
+                        writer.close();
+
+
+                    }catch (IOException e) {
+                         System.out.println("Error al guardar datos.");
+                    }
+                  }
+                  public static  void buscarProductos(Producto[] inventario, int contadorProductos) {
+                     Scanner scanner = new Scanner(System.in);
+                     System.out.println("--- Buscar Producto ---");
+                     System.out.println("Ingrese codigo o nombre del producto: ");
+                     String busqueda = scanner.nextLine().toLowerCase();
+
+                     boolean encontrado = false;
+                     for (int i = 0; i < contadorProductos; i++) {
+                         if (inventario[i] != null &&(inventario[i].codigounico.toLowerCase().equals(busqueda) || inventario[i].nombre.toLowerCase().contains(busqueda))) {
+                             System.out.println(" Producto encontrado: ");
+                             System.out.println("Nombre: " + inventario[i].nombre);
+                             System.out.println("Categoria: " + inventario[i].categoria);
+                             System.out.println("Precio: " + inventario[i].precio);
+                             System.out.println("Cantidad: " + inventario[i].cantidad);
+                             System.out.println("Codigo: " + inventario[i].codigounico);
+                             encontrado = true;
+
+                         }
+                     }
+                    if (!encontrado) {
+                        System.out.println("No se encontraron Productos en los datos.");
+                    }
                   }
 
 }
