@@ -2,6 +2,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
+import java.time.LocalDate;
+import java.time.LocalTime;
 public class Main {
 
     static Producto[] inventario = new Producto[100];
@@ -51,7 +53,8 @@ public class Main {
                      guardarInventario(inventario, contadorProductos);
                      break;
                  case 4:
-                     System.out.println("n-> Opcion: Registrar Venta");
+                     registrarVenta(inventario, contadorProductos);
+                     guardarInventario(inventario, contadorProductos);
                      //
 
                      break;
@@ -178,7 +181,7 @@ public class Main {
                          coincide = inventario[i].categoria.toLowerCase().contains(termino);
                          break;
 
-                      case 3;
+                     case 3:
                           coincide = inventario[i].codigounico.toLowerCase().contains(termino);
                           break;
 
@@ -327,6 +330,89 @@ public class Main {
                         System.out.println("No se encontraron Productos en los datos.");
                     }
                   }
+                  public static void registrarVenta(Producto[] inventario, int contadorProductos) {
+                   Scanner scanner = new Scanner(System.in);
+
+                   System.out.println(" ----Resgistrar Venta--- ");
+                   System.out.println("Ingrese el Producto: ");
+                   String codigo = scanner.nextLine();
+
+                   Producto producto = null;
+                   int indice =-1;
+
+                   for (int i = 0; i < contadorProductos; i++) {
+                       if (inventario[i] != null && inventario[i].codigounico.equalsIgnoreCase(codigo)) {
+                           producto = inventario[i];
+                           indice = i;
+                           break;
+                       }
+                      }
+                   if (producto == null) {
+                       System.out.println("Error: Producto no encontrado. ");
+                       return;
+                   }
+
+                    System.out.println(" Producto encontrado: ");
+                   System.out.println("Nombre: " + producto.nombre);
+                   System.out.println("Precio: " + producto.precio);
+                   System.out.println("Exixtencia: " + producto.cantidad);
+
+                   int cantidadVender;
+                   while (true)  {
+                       System.out.println("Ingrese la cantidad de productos: ");
+                       try {
+                           cantidadVender = scanner.nextInt();
+                           if (cantidadVender <= 0 ) {
+                               System.out.println("Error: La cantidad debe ser un numero positivo. ");
+                               continue;
+
+                           }
+                           if (cantidadVender > producto.cantidad) {
+                               System.out.println("Error: Articulos Agostados. Articulos disponibles: " + producto.cantidad + "unidades- ");
+                               continue;
+                           }
+                           break;
+
+                           }catch (Exception e) {
+                           System.out.println("Error: Ingrese un Valor numerico.");
+                           scanner.nextLine();
+                       }
+                   }
+
+                   double totalVenta = producto.precio * cantidadVender;
+
+                   producto.cantidad -= cantidadVender;
+                   inventario[indice] = producto;
+
+                   guardarVenta(producto, cantidadVender, totalVenta);
+
+                   System.out.println("Venta registrada exitosamente:");
+                      System.out.println("Producto: " + producto.nombre);
+                      System.out.println("Cantidad: " + cantidadVender);
+                      System.out.println("Total: " + totalVenta);
+                      System.out.println(" Nuevos Articulos Disponiulbes: " + producto.cantidad);
+                  }
+          public static  void guardarVenta(Producto producto, int cantidad, double total) {
+
+          try (FileWriter writer = new FileWriter("DatosVentas.txt, true")) {
+
+              writer.write((java.time.LocalDate.now()) + "|" + java.time.LocalTime.now() + "|" + producto.codigounico + "|" + producto.nombre + "|" +
+                      cantidad + "|" + producto.precio + "|" + total + "\n");
+          }catch (IOException e) {
+              System.out.println("Error al guardar datos de venta: "+ e.getMessage());
+          }
+          }
+          public static  void registrarBitacora(String accion, String resultado, String detalles) {
+            try (FileWriter writer = new FileWriter("Bitacora.txt", true)) {
+                String fechaHora = java.time.LocalDateTime.now().toString();
+                writer.write(fechaHora + "|" + accion + "|" + resultado + "|" +
+                        detalles + "\n");
+
+            }catch (IOException e) {
+                System.out.println("Error al registrar la bitacora: " + e.getMessage());
+                
+            }
+          }
 
 }
 
