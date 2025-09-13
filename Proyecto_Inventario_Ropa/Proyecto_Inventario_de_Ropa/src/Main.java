@@ -38,49 +38,67 @@ public class Main {
              scanner.nextLine();
              switch (opcion) {
                  case 1:
+                     int contador = contadorProductos;
                      contadorProductos = agregarProducto(inventario, contadorProductos);
-                             //
                      guardarInventario(inventario, contadorProductos);
+                     // LLaves en los else
+                     if (contadorProductos > contador) {
+                         registrarBitacora("Agregar_Producto", "Guardado", "Producto agregado:"+ inventario[contador].nombre);
+                     } else {
+                         registrarBitacora("Agregar_Producto", "Error", "Intentelo de nuevo");
+                     }
                      break;
                  case 2:
                      buscarProducto(inventario, contadorProductos);
                      //
+                     registrarBitacora("Buscar_Producto", "Procesando","Busqueda con exito");
+                     break;
 
-                     break;
                  case 3:
+                     contador = contadorProductos;
                      contadorProductos = eliminarProducto(inventario , contadorProductos);
-                     //
                      guardarInventario(inventario, contadorProductos);
+                     //
+                     if (contadorProductos < contador) {
+                         registrarBitacora("Eliminar_Producto","Realizado", "Producto Eliminado.");
+                     } else {
+                         registrarBitacora("Eliminar_Producto", "Error", "Producto no encontrado.");
+                     }
                      break;
+
                  case 4:
                      registrarVenta(inventario, contadorProductos);
                      guardarInventario(inventario, contadorProductos);
                      //
-
+                      registrarBitacora("Registrar_Venta", "Realizado", "Registro Completado.");
                      break;
                  case 5:
                      System.out.println("n-> Opcion: Generar Reportes");
                      //
-
+                     registrarBitacora("Generar_Reportes", "Realizado", "Reportes Generados");
                      break;
+
                  case 6:
-                     System.out.println("n-> Opcion: Ver Datos del Estudiante");
-                     //
+                    mostrarDatosEstudiante();
 
+                     //
+                     registrarBitacora("Datos_Estudiantes", "Realizado","Datos Mostrados: ");
                      break;
+
                  case 7:
                      System.out.println("n-> Opcion: Bitacora ");
                      //
-
+                     mostrarBitacora();
                      break;
+
                  case 8:
                      salir = true ;
                      guardarInventario(inventario, contadorProductos);
-
+                     registrarBitacora("Salir","Saliendo..", "Sistema Cerrado");
                      System.out.println("Cerrando del Sistenam");
                      break;
                  default:
-                     System.out.println("Operacion no  Valida,Por favor Elija Nuevamente");
+
 
              }
 
@@ -413,6 +431,42 @@ public class Main {
                 
             }
           }
+          public static void mostrarBitacora() {
+         System.out.println("---Bitacora del Sistema---");
+         File archivo = new File("bitacora.txt");
 
+         if (!archivo.exists())  {
+             System.out.println("No hay registros en la bitacora. ");
+             return;
+         }
+         try (Scanner fileScanner = new Scanner(archivo)) {
+             int contador2 = 0;
+             while (fileScanner.hasNextLine()) {
+                 String linea = fileScanner.nextLine();
+                 String[] datos = linea.split("\\|");
+
+                 if (datos.length >= 4 ) {
+                     System.out.println("Fecha_Hora:" + datos[0]);
+                     System.out.println("Accion: " + datos[1]);
+                     System.out.println("Resultado: " + datos[2]);
+                     System.out.println("Detalles: " + datos[3]);
+                     contador2++;
+
+                 }
+             }
+             System.out.println("Resultados de los registros: " + contador2);
+         } catch (IOException e) {
+             System.out.println("Error en la busqueda de la bictacora: " + e.getMessage());
+         }
+          }
+          public static void mostrarDatosEstudiante() {
+           System.out.println("---Datos del Estudiante---");
+           System.out.println("Nombres: Kevin_Emanuel ");
+           System.out.println("Apellidos: Ramirez_Revolorio");
+           System.out.println("Carne: 201907719");
+           System.out.println("Practica1_Inventario_de_Ropa. ");
+           System.out.println("Seccion: C");
+           System.out.println("Semestre_2_2025 ");
+          }
 }
 
