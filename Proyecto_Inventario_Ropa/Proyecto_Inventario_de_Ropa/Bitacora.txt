@@ -1,1 +1,14 @@
 2025-09-12T22:04:09.068989300|Datos_Estudiantes|Realizado|Datos Mostrados: 
+2025-09-12T23:43:30.888838200|Agregar_Producto|Guardado|Producto agregado:Camisa
+2025-09-12T23:44:05.957590400|Buscar_Producto|Procesando|Busqueda con exito
+2025-09-12T23:44:59.215619500|Agregar_Producto|Error|Intentelo de nuevo
+2025-09-12T23:45:12.135510200|Eliminar_Producto|Error|Producto no encontrado.
+2025-09-12T23:45:53.247896500|Agregar_Producto|Error|Intentelo de nuevo
+2025-09-12T23:46:29.161069700|Registrar_Venta|Realizado|Registro Completado.
+2025-09-12T23:46:35.566739200|Datos_Estudiantes|Realizado|Datos Mostrados: 
+2025-09-12T23:47:06.975512100|Eliminar_Producto|Error|Producto no encontrado.
+2025-09-12T23:47:30.341043900|Registrar_Venta|Realizado|Registro Completado.
+2025-09-12T23:47:43.701656600|Generar_Reportes|Realizado|Reportes Generados
+2025-09-12T23:48:24.771914|Salir|Saliendo..|Sistema Cerrado
+2025-09-14T22:52:18.556566100|Generar_Reporte|Error|No hay Ventas
+2025-09-14T22:52:18.561565|Generar_Reportes|Realizado|Reportes Generados
