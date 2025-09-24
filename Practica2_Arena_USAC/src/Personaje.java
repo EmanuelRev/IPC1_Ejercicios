@@ -25,5 +25,44 @@ public class Personaje {
         this.defensa = defensa;
 
     }
+   public int getId(){
+        return id;
 
+   }
+   public String getNombre(){
+        return nombre;
+   }
+   public String getArma(){
+       return arma;
+
+   }
+   public int getVida() {
+        return  vida;
+
+   }
+   public int getAtaque(){
+        return  ataque;
+   }
+   public int getVelocidad(){
+        return velocidad;
+
+   }
+   public int getAgilidad(){
+        return agilidad;
+
+       }
+       public int getDefensa(){
+        return defensa;
+
+   }
+   public String toSring(){
+        return  "ID" +id+
+        "Nombre: " + nombre +
+        "Vida "+ vida +
+        "Ataque: " + ataque +
+        "Defensa:" + defensa +
+        "Arma: " + arma ;
+
+
+   }
 }
