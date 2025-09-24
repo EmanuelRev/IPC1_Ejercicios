@@ -53,6 +53,30 @@ public class Personaje {
        }
        public int getDefensa(){
         return defensa;
+           {
+               public void setNombre(String nombre){
+                   this.nombre = nombre;
+
+           }
+           public void setArma(String arma){
+                   this.arma = arma;
+           }
+           public void setVida(int vida){
+                   this.vida = vida;
+           }
+           public void setAtaque(int ataque){
+                   this.ataque = ataque;
+           }
+           public void setVelocidad(int velocidad){
+                   this.velocidad = velocidad;
+           }
+           public void setAgilidad(int agilidad){
+                   this.agilidad = agilidad;
+           }
+           public void setDefensa(int defensa){
+                   this.defensa = defensa;
+           }
+           }
 
    }
    public String toSring(){
@@ -65,4 +89,5 @@ public class Personaje {
 
 
    }
-}
+
+    }
