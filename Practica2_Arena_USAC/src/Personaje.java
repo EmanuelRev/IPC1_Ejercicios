@@ -6,12 +6,12 @@ public class Personaje {
     private String nombre;
     private String arma;
     private int vida;
-    private  int ataque;
+    private int ataque;
     private int velocidad;
     private int agilidad;
     private int defensa;
-    
-   //esto es el construcctor para personajes
+
+    //esto es el construcctor para personajes
 
     public Personaje(String nombre, String arma, int vida, int ataque, int velocidad, int agilidad, int defensa) {
         this.id = contadorId;
@@ -25,69 +25,78 @@ public class Personaje {
         this.defensa = defensa;
 
     }
-   public int getId(){
+
+    public int getId() {
         return id;
 
-   }
-   public String getNombre(){
+    }
+
+    public String getNombre() {
         return nombre;
-   }
-   public String getArma(){
-       return arma;
+    }
 
-   }
-   public int getVida() {
-        return  vida;
+    public String getArma() {
+        return arma;
 
-   }
-   public int getAtaque(){
-        return  ataque;
-   }
-   public int getVelocidad(){
+    }
+
+    public int getVida() {
+        return vida;
+
+    }
+
+    public int getAtaque() {
+        return ataque;
+    }
+
+    public int getVelocidad() {
         return velocidad;
 
-   }
-   public int getAgilidad(){
+    }
+
+    public int getAgilidad() {
         return agilidad;
 
-       }
-       public int getDefensa(){
+    }
+
+    public int getDefensa() {
         return defensa;
-           {
-               public void setNombre(String nombre){
-                   this.nombre = nombre;
+    }
 
-           }
-           public void setArma(String arma){
-                   this.arma = arma;
-           }
-           public void setVida(int vida){
-                   this.vida = vida;
-           }
-           public void setAtaque(int ataque){
-                   this.ataque = ataque;
-           }
-           public void setVelocidad(int velocidad){
-                   this.velocidad = velocidad;
-           }
-           public void setAgilidad(int agilidad){
-                   this.agilidad = agilidad;
-           }
-           public void setDefensa(int defensa){
-                   this.defensa = defensa;
-           }
-           }
+            public void setNombre (String nombre){
+            this.nombre = nombre;
 
-   }
-   public String toSring(){
-        return  "ID" +id+
-        "Nombre: " + nombre +
-        "Vida "+ vida +
-        "Ataque: " + ataque +
-        "Defensa:" + defensa +
-        "Arma: " + arma ;
+        }
+            public void setArma (String arma){
+            this.arma = arma;
+        }
+            public void setVida ( int vida){
+            this.vida = vida;
+        }
+            public void setAtaque ( int ataque){
+            this.ataque = ataque;
+        }
+            public void setVelocidad ( int velocidad){
+            this.velocidad = velocidad;
+        }
+            public void setAgilidad ( int agilidad){
+            this.agilidad = agilidad;
+        }
+            public void setDefensa ( int defensa){
+            this.defensa = defensa;
+        }
 
 
-   }
+
+        public String toString () {
+            return "ID" + id +
+                    "Nombre: " + nombre +
+                    "Vida " + vida +
+                    "Ataque: " + ataque +
+                    "Defensa:" + defensa +
+                    "Arma: " + arma;
+
+
+        }
 
     }

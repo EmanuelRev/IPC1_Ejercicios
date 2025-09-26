@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -45,29 +46,41 @@ public class Main {
     }
 
     public static void agregarPersonaje() {
-        System.out.println(" Agregar Puchamon");
-        System.out.println("Nombre:");
-        String nombre = scanner.nextLine();
+        String nombre = JOptionPane.showInputDialog((null,"Ingrese el nombre del Puchamon","Agregar Puchamon",JOptionPane.QUESTION_MESSAGE);
 
-        System.out.println("Arma: ");
-        String arma = scanner.nextLine();
+        if (nombre == null || nombre.trim().isEmpty()){
+            JOptionPane.showMessageDialog(null,"Debe Ingresar Nombre.", "Error",JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        String arma = JOptionPane.showInputDialog(null,"Ingrese el arma del Puchamon: ","Agregar arma",JOptionPane.QUESTION_MESSAGE);
 
-        System.out.println("Vida (100-500): ");
-        int vida = scanner.nextInt();
+        if (arma == null || arma.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null,"Debe ingresar un arma ","Error",JOptionPane.ERROR_MESSAGE);
+            return;
 
-        System.out.println("Ataque (10-100): ");
-        int ataque = scanner.nextInt();
 
-        System.out.println("Velocidad(1-10)");
-        int velocidad = scanner.nextInt();
+        }
 
-        System.out.println("Agilidad (1-10)");
-        int agilidad = scanner.nextInt();
+        int vida = NumeroRango("Vida (100-500) ","Agregando Vida",100,500);
+        if (vida ==-1) return;
 
-        System.out.println("Defensa(1-50): ");
-        int defensa = scanner.nextInt();
-        scanner.nextLine();
+        int ataque = NumeroRango("Ataque (10-100)","Agregando Ataque",10,100);
+        if (ataque == -1 )
+                return;
 
+        int velocidad NumeroRango("Velocidad (1-10) ","Agregando Velociad",1,10);
+        if (velocidad == -1) return;
+
+        int agilidad NumeroRango("Agilidad (1-10)","Agregando Agilidad", 1,10);
+        if (agilidad == -1) return;
+
+        int defensa NumeroRango("Defensa (1-50)","Agregando Defensa",1,50);
+        if (defensa == -1 ) return;
+
+        Personaje nuevoPerosnaje = new Personaje(nombre,arma,vida,ataque,velocidad,agilidad,defensa);
+        personajes.add(nuevoPerosnaje);
+
+        JOptionPane.showMessageDialog(null, "Puchamon Agregado a la Arena!\ID asginado: " + nuevoPerosnaje.getId(),"Exito",JOptionPane.INFORMATION_MESSAGE);
         //investigar personajer nuevo
 
         Personaje nuevoPersonaje = new Personaje(nombre, arma, vida, ataque, velocidad, agilidad, defensa);
@@ -78,15 +91,17 @@ public class Main {
     }
 // agregar case4
     public static void verPersonajes () {
-        System.out.println("Puchamones en la Arena");
 
         if (personajes.isEmpty()) {
-            System.out.println("No hay Puchamones para luchar..");
+            JOptionPane.showMessageDialog(null,"No hay Puchamones Registrados","Ver Puchamones",JOptionPane.INFORMATION_MESSAGE);
             return;
         }
+        StringBuilder ListaPuchamones = new StringBuilder("--- Puchamones Registrados---\n\n");
         for (Personaje personaje : personajes) {
-            System.out.println(personaje.toSring());
+            System.out.println(personaje.toString());
         }
+
+        JOptionPane.showMessageDialog(null,ListaPuchamones.toString(),"Lista de Puchamones",JOptionPane.INFORMATION_MESSAGE);
     }
     public static Personaje buscarPersonaje(int idBuscado){
         for (Personaje personaje : personajes){
@@ -114,7 +129,7 @@ public class Main {
             return;
         }
         System.out.println("Datos del Puchamon: ");
-        System.out.println(personajeAModificar.toSring());
+        System.out.println(personajeAModificar.toString());
         System.out.println("habilidad a cambiar..");
         System.out.println("1. nombre");
         System.out.println("2. arma");
@@ -131,7 +146,7 @@ public class Main {
             case 1:
                 System.out.println("Nuevo nombre a su puchamon: ");
                 String nuevoNombre = scanner.nextLine();
-                personajeAModificar,setNombre(nuevoNombre);
+                personajeAModificar.setNombre(nuevoNombre);
                 System.out.println("Nombre Modificado" + nuevoNombre);
                 break;
             case 2:
@@ -204,6 +219,69 @@ public class Main {
                 System.out.println("Opcion Invalida");
         }
 
+    }
+    // aqui la interfaz con joption xD
+    public static void MenuPrincipal(){
+        while (true){
+
+            String menu = "--Menu Principal--" + "1. Agregar Personaje\n" + "2. Ver Puchamones\n" + "3. Modificar Puchamon\n" + "4. Eliminar Puchamon\n" + "5. Salir de la  Arena" ;
+
+            String opcionStr = JOptionPane.showInputDialog(null, menu, "Arena ING USAC", JOptionPane.QUESTION_MESSAGE);
+
+            if (opcionStr == null){
+                int confirmar = JOptionPane.showConfirmDialog(null,"¿Desea Abandonar Arena?","Confirmar Salida",JOptionPane.YES_NO_OPTION);
+
+                if (confirmar == JOptionPane.YES_NO_OPTION) {
+                    JOptionPane.showMessageDialog(null, "Nos vemos en otro Combate");
+                    break;
+                }else{
+                    continue;
+                }
+            }
+            try {
+                int opcion = Integer.parseInt(opcionStr);
+
+                switch (opcion) {
+                    case 1:
+                        agregarPersonaje();
+                        break;
+                    case 2:
+                        verPersonajes();
+                        break;
+                    case 3:
+                        modificarPersonaje();
+                        break;
+                    case 4:
+                        eliminarPersonaje();
+                        break;
+                    case 5:
+                        JOptionPane.showMessageDialog(null,"Nos Vemos en otro Combate!");
+                        return;
+                    default:
+                        JOptionPane.showMessageDialog(null,"Opcion Invalida,Vuelva a Intentar.","Error",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+// mover este metodo
+        }
+        public static  int NumeroRango(String mensaje,String titulo, int min, int max){
+            while (true){
+                String input = JOptionPane.showInputDialog(null,mensaje,titulo,JOptionPane.QUESTION_MESSAGE);
+
+                if (input == null){
+                    return -1 ;
+                }
+                try {
+                    int numero = Integer.parseInt(input);
+                    if (numero >= min && numero <= max){
+                        return numero;
+                    }else {
+                        JOptionPane.showMessageDialog(null,"El numero debe ser"+ min " y " + max + ".","Error de Rango",JOptionPane.ERROR_MESSAGE);
+                    }
+                }catch (NumberFormatException e){
+                    JOptionPane.showMessageDialog(null,"Ingrese un Numero Valido.","Error",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
     }
 }
 
