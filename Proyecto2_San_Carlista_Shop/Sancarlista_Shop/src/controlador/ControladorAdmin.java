@@ -113,7 +113,7 @@ public class ControladorAdmin {
 
         }
 
-        private void buscarUsuario(String codigo) {
+        private Usuario buscarUsuario(String codigo) {
         for (int i = 0; i < totalUsuarios; i++){
             if (usuarios[i] != null && usuarios[i].getCodigo().equals(codigo)) {
                 return usuarios[i];

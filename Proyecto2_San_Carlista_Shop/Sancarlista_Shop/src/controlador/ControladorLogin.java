@@ -3,6 +3,8 @@ package controlador;
 
 import modelo.Usuario;
 import vista.Login;
+import vista.VistaAdmin;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -78,31 +80,21 @@ public class ControladorLogin {
 
     private void  segundoRol(Usuario usuario) {
         vista.ocultar();
-        String mensaje = "";
-        switch (usuario.getTipo()) {
+        switch (usuario.getTipo()){
             case "ADMIN":
-                mensaje = "Bienvenido ADMIN: "+ usuario.getNombre();
+                VistaAdmin vistaAdmin = new VistaAdmin();
+                ControladorAdmin controladorAdmin = new ControladorAdmin(vistaAdmin, usuarios, totalUsuarios);
+                vistaAdmin.mostrar();
                 break;
-            case "VENDEDOR":
-                mensaje = "Bienvenido Vendedor: " + usuario.getNombre();
+
+            case  "VENDEDOR" :
+                JOptionPane.showMessageDialog(null, "Bienvenido Vendedor:" + usuario.getNombre());
                 break;
+
             case "Cliente":
-                mensaje = "Bienvenido Cliente: " + usuario.getNombre();
+                JOptionPane.showMessageDialog(null,"Bievenido Cliente"+ usuario.getNombre());
                 break;
         }
-        JOptionPane.showMessageDialog(null,mensaje);
-
-        System.out.println("Volviendo al Acceso...");
-        Timer timer = new Timer(3000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                vista.limpiarCampos();
-                vista.mostrar();
-                System.out.println("Volviendo al Acceso...");
-            }
-        });
-        timer.setRepeats(false);
-        timer.start();
     }
     public void iniciar(){
         vista.mostrar();
