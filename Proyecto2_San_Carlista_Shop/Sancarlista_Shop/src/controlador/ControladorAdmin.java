@@ -2,12 +2,15 @@ package controlador;
 
 import modelo.Usuario;
 import modelo.Vendedor;
+import vista.VistaActualizarVendedor;
 import vista.VistaAdmin;
 import vista.VistaGestionVendedores;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+//Actualizando metodos
+private VistaActualizarVendedor vistaActualizarVendedor;
 
 
 //los import jajaja
@@ -67,6 +70,69 @@ public class ControladorAdmin {
                 regresarMenu();
             }
         });
+
+        // actualizando metodos x_xx
+        vistaVendedores.setActualizarListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                abrirActualizarVendedor();
+            }
+        });
+
+        vistaVendedores.setEliminarListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                eliminarVendedor();
+            }
+        });
+
+        private void abrirActuzalizarVendedor () {
+            vistaActualizarVendedor = new VistaActualizarVendedor();
+            configurarListenerVendedore();
+            vistaActualizarVendedor.mostar();
+        }
+
+        private void configurarListenerActualizarVendedor() {
+            vistaActualizarVendedor .setBuscarListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    buscarVendedorParaActualizar();
+                }
+            });
+            vistaActualizarVendedor.setActualizarListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    actualizarVendedor();
+                }
+            });
+
+            vistaActualizarVendedor.setCancelarListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    vistaActualizarVendedor.ocultar();
+                }
+            });
+
+        }
+
+        private void buscarVendedorParaActualizar() {
+            String codigo = vistaActualizarVendedor.getCodigoBuscar();
+            if (!util.Validaciones.validarCampoVacio(codigo, "Codigo")) {
+                return;
+            }
+            Usuario usuario = buscarUsuario(codigo);
+            if (usuario != null && usuario instanceof  Vendedor) {
+                Vendedor vendedor = (Vendedor) usuario;
+                vistaActualizarVendedor.setDatosVendedor(vendedor.getCodigo(),
+                        vendedor.getNombre(),
+                        vendedor.getGenero(),
+                        vendedor.getContrasenia());
+                util.Validaciones.mostrarExito("Vendedor Encontrado, puede añadir o cambiar datos.");
+        }else {
+                util.Validaciones.mostrarError("No se encontro un vendedor con ese codigo intente de nuevo.");
+                vistaActualizarVendedor.limpiarFormulario();
+            }
+
         }
         private void crearVendedor() {
 
