@@ -258,4 +258,25 @@ public class ControladorAdmin {
         vistaAdmin.ocultar();
         JOptionPane.showMessageDialog(null, "Sesion Cerrada Exitosamente");
     }
+
+    private void cargarVendedoresDesdeCSV() {
+        String rutaArchivo = utilidades.ArchivosCSV.seleccionarArchivoCSV();
+        if (rutaArchivo == null) return;
+
+        modelo.Vendedor[] vendedoresCargados = utilidades.ArchivosCSV.cargarVendedorDesdeCSV(rutaArchivo);
+
+        int agregados = 0;
+        for (int i = 0; i < vendedoresCargados.length; i ++) {
+            if (vendedoresCargados[i] != null && buscarUsuario(vendedoresCargados[i].getCodigo()) == null) {
+
+                if (totalUsuarios < usuarios.length) {
+                    usuarios[totalUsuarios] = vendedoresCargados[i];
+                    totalUsuarios++;
+                    agregados++;
+                }
+            }
+        }
+        actualizarListaVendedores();
+        JOptionPane.showMessageDialog(null,"Se Agregaron" + agregados + "Vendedores desde CSV");
+    }
 }
