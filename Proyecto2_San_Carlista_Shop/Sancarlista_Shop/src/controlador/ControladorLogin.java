@@ -31,9 +31,25 @@ public class ControladorLogin {
 
     private void crearUsuarioAdmin() {
         Usuario admin = new Usuario("admin","Administrador Principal","M","IPC1C");
+
         usuarios[totalUsuarios] = admin;
         totalUsuarios++;
         System.out.println("Usuario Creado Prueba ");
+        cargarUsuariosGuardados();
+    }
+
+
+    private void cargarUsuariosGuardados() {
+        modelo.Usuario[] usuariosCargados = utilidades.Serializador.cargarUsuario();
+        if (usuariosCargados != null) {
+            for (int i =0; i < usuariosCargados.length && totalUsuarios < usuarios.length; i++) {
+                if(!usuariosCargados[i].getCodigo().equals("admin")) {
+                    usuarios[totalUsuarios] = usuariosCargados[i];
+                    totalUsuarios++;
+                }
+            }
+            System.out.println("Datos" + usuariosCargados.length + "Usuarios Cargados de la Base de Datos");
+        }
     }
     private void configurarEventos() {
         vista.accesoListener(new ActionListener() {
@@ -41,6 +57,7 @@ public class ControladorLogin {
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Boton Creado Prueba");
                 validarLogin();
+
             }
         });
     }

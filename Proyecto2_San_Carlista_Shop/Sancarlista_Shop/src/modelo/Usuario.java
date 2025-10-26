@@ -1,6 +1,10 @@
 package modelo;
+import java.io.Serializable;
 
-public class Usuario {
+
+public class Usuario implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String codigo;
     private String nombre;
@@ -40,4 +44,5 @@ public class Usuario {
     public boolean verificarContraseia(String contraseniaIngresada) {
         return  this.contrasenia.equals(contraseniaIngresada) ;
     }
+
 }

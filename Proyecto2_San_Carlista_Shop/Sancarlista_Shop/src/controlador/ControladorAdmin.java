@@ -10,9 +10,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import utilidades.Validaciones;
 
-
 //Actualizando metodos
 public class ControladorAdmin {
+
+    // aqui coloco los atributos nuevos
+    private vista.VistaGestionProductos vistaProductos;
+    private modelo.Producto[] productos;
+    private int totalProductos;
+
+    // aqui termino lo que estoy haciendo ajaja
 
     private VistaAdmin vistaAdmin;
     private VistaGestionVendedores vistaVendedores;
@@ -20,10 +26,18 @@ public class ControladorAdmin {
     private Usuario[] usuarios;
     private int totalUsuarios;
 
-    public ControladorAdmin(VistaAdmin vistaAdmin, Usuario[] usuarios, int totalUsuarios) {
+// constructor
+
+    public ControladorAdmin(vista.VistaAdmin vistaAdmin, modelo.Usuario[] usuarios, int totalUsuarios) {
         this.vistaAdmin = vistaAdmin;
         this.usuarios = usuarios;
         this.totalUsuarios = totalUsuarios;
+        configurarListenerAdmin();
+
+        this.productos = new modelo.Producto[100];
+        this.totalProductos = 0;
+
+        cargarDatos();
         configurarListenerAdmin();
     }
 
@@ -41,10 +55,132 @@ public class ControladorAdmin {
                 cerrarSesion();
             }
         });
+
+        vistaAdmin.setGestionProductosL(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                abrirGestionProductos();
+            }
+        });
     }
 
+    // ------------------ PRODUCTOS ------------------
+
+    private void abrirGestionProductos() {
+        System.out.println("Abriendo Gestion de Productos...");
+
+        vistaProductos = new vista.VistaGestionProductos();
+        configurarListenerProductos();
+        actualizarListaProductos();
+
+        vistaAdmin.ocultar();
+        vistaProductos.mostrar();
+    }
+
+    private void configurarListenerProductos() {
+        vistaProductos.setCrearListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                crearProducto();
+            }
+        });
+        vistaProductos.setRegresarListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                regresarAlMenuProductos();
+            }
+        });
+    }
+
+    private void crearProducto() {
+        String codigo = vistaProductos.getCodigo();
+        String nombre = vistaProductos.getNombre();
+        String categoria = vistaProductos.getCategoria();
+        String stockStr = vistaProductos.getStock();
+        String atributo = vistaProductos.getAtributo();
+
+        // validando todo
+        if (codigo.isEmpty() || nombre.isEmpty() || stockStr.isEmpty() || atributo.isEmpty()) {
+            utilidades.Validaciones.mostrarError("Todos los campos son Obligatorios");
+            return;
+        }
+
+        int stock;
+        try {
+            stock = Integer.parseInt(stockStr);
+            if (stock < 0) throw new NumberFormatException();
+        } catch (NumberFormatException e) {
+            utilidades.Validaciones.mostrarError("Stock debe ser un valor numerico positivo");
+            return;
+        }
+
+        if (buscarProducto(codigo) != null) {
+            utilidades.Validaciones.mostrarError("El codigo ya Existe");
+            return;
+        }
+
+        modelo.Producto nuevoProducto = null;
+
+        if (categoria.equals("Tecnologia")) {
+            try {
+                int meses = Integer.parseInt(atributo);
+                nuevoProducto = new modelo.ProductoTecnologia(codigo, nombre, stock, meses);
+            } catch (NumberFormatException e) {
+                utilidades.Validaciones.mostrarError("Para Tecnologia, Ingrese Meses de Garantia (valor Numerico)");
+                return;
+            }
+        } else if (categoria.equals("Alimento")) {
+            nuevoProducto = new modelo.ProductoGeneral(codigo, nombre, stock, atributo);
+        } else if (categoria.equals("General")) {
+            nuevoProducto = new modelo.ProductoGeneral(codigo, nombre, stock, atributo);
+        }
+
+        if (nuevoProducto != null) {
+            productos[totalProductos] = nuevoProducto;
+            totalProductos++;
+
+            vistaProductos.limpiarFormulario();
+            actualizarListaProductos();
+            utilidades.Validaciones.mostrarExito("Producto Creado Exitosamente");
+
+            nuevoProducto.crear();
+        }
+    }
+
+    private void actualizarListaProductos() {
+        StringBuilder lista = new StringBuilder("--Productos Registrados--\n\n");
+
+        for (int i = 0; i < totalProductos; i++) {
+            if (productos[i] != null) {
+                lista.append(productos[i].getInfoBasica()).append("\n");
+            }
+        }
+
+        if (totalProductos == 0) {
+            lista.append("No hay Productos registrados. Use el Formulario para Ingresar Productos");
+        }
+
+        vistaProductos.mostrarProductos(lista.toString());
+    }
+
+    private modelo.Producto buscarProducto(String codigo) {
+        for (int i = 0; i < totalProductos; i++) {
+            if (productos[i] != null && productos[i].getCodigo().equals(codigo)) {
+                return productos[i];
+            }
+        }
+        return null;
+    }
+
+    private void regresarAlMenuProductos() {
+        vistaProductos.ocultar();
+        vistaAdmin.mostrar();
+    }
+
+    // ------------------ VENDEDORES ------------------
+
     private void abrirGestionVendedores() {
-        System.out.println("Abreindo Operaciones de Vendedores...");
+        System.out.println("Abriendo Operaciones de Vendedores...");
         vistaVendedores = new VistaGestionVendedores();
         configurarListenerVendedores();
         actualizarListaVendedores();
@@ -127,7 +263,7 @@ public class ControladorAdmin {
             utilidades.Validaciones.mostrarError("No se encontro un vendedor con ese codigo intente de nuevo.");
             vistaActualizarVendedor.limpiarFormulario();
         }
-    } // aqui coloque una llave ya no tiroe error revisar
+    }
 
     private void actualizarVendedor() {
         String codigoOriginal = vistaActualizarVendedor.getCodigoOriginal();
@@ -135,7 +271,6 @@ public class ControladorAdmin {
         String nuevoGenero = vistaActualizarVendedor.getNuevoGenero();
         String nuevaContrasenia = vistaActualizarVendedor.getNuevaContrasenia();
 
-        // validando datos
         if (!utilidades.Validaciones.validarCampoVacio(nuevoNombre, "nombre") ||
                 !utilidades.Validaciones.validarCampoVacio(nuevoGenero, "genero") ||
                 !utilidades.Validaciones.validarCampoVacio(nuevaContrasenia, "Contrasenia")) {
@@ -160,9 +295,6 @@ public class ControladorAdmin {
         }
     }
 
-    //Metodo para mata vendedor jaja
-
-
     private void eliminarVendedor() {
         String codigo = JOptionPane.showInputDialog("Ingrese el Codigo del vendedor que desea eliminar: ");
         if (codigo == null || codigo.trim().isEmpty()) {
@@ -180,7 +312,7 @@ public class ControladorAdmin {
                         }
                         usuarios[totalUsuarios - 1] = null;
                         totalUsuarios--;
-                        utilidades.Validaciones.mostrarExito("Vendedeor eliminado Exitosamente");
+                        utilidades.Validaciones.mostrarExito("Vendedor eliminado Exitosamente");
                         actualizarListaVendedores();
                         return;
                     }
@@ -206,7 +338,7 @@ public class ControladorAdmin {
             return;
         }
         if (buscarUsuario(codigo) != null) {
-            JOptionPane.showMessageDialog(null, "El Codigo" + codigo + "Ya Existe");
+            JOptionPane.showMessageDialog(null, "El Codigo " + codigo + " ya Existe");
             return;
         }
         Vendedor nuevoVendedor = new Vendedor(codigo, nombre, genero, contrasenia);
@@ -219,7 +351,7 @@ public class ControladorAdmin {
     }
 
     private void actualizarListaVendedores() {
-        StringBuilder lista = new StringBuilder("---Vendedores Regsitrados----\n\n");
+        StringBuilder lista = new StringBuilder("---Vendedores Registrados----\n\n");
         boolean hayVendedores = false;
         for (int i = 0; i < totalUsuarios; i++) {
             if (usuarios[i] instanceof Vendedor) {
@@ -255,8 +387,10 @@ public class ControladorAdmin {
 
     private void cerrarSesion() {
         System.out.println("Cerrando Sesion del Administrador..");
+        guarDAtos();
+
         vistaAdmin.ocultar();
-        JOptionPane.showMessageDialog(null, "Sesion Cerrada Exitosamente");
+        JOptionPane.showMessageDialog(null, "Sesion Cerrada-Datos Guardados :D");
     }
 
     private void cargarVendedoresDesdeCSV() {
@@ -266,7 +400,7 @@ public class ControladorAdmin {
         modelo.Vendedor[] vendedoresCargados = utilidades.ArchivosCSV.cargarVendedorDesdeCSV(rutaArchivo);
 
         int agregados = 0;
-        for (int i = 0; i < vendedoresCargados.length; i ++) {
+        for (int i = 0; i < vendedoresCargados.length; i++) {
             if (vendedoresCargados[i] != null && buscarUsuario(vendedoresCargados[i].getCodigo()) == null) {
 
                 if (totalUsuarios < usuarios.length) {
@@ -277,6 +411,40 @@ public class ControladorAdmin {
             }
         }
         actualizarListaVendedores();
-        JOptionPane.showMessageDialog(null,"Se Agregaron" + agregados + "Vendedores desde CSV");
+        JOptionPane.showMessageDialog(null, "Se Agregaron " + agregados + " Vendedores desde CSV");
+    }
+    // guardando todos los datos
+
+    private void guarDAtos() {
+        boolean usuariosGuardados = utilidades.Serializador.guardarUsuarios(usuarios,totalUsuarios);
+
+        boolean productosGuardados = utilidades.Serializador.guardarProdcutos(productos, totalProductos);
+
+        if (usuariosGuardados && productosGuardados) {
+            System.out.println("Todos los Datos Guardados Exitosamenete.");
+        }else {
+            System.out.println("Algunos Datos No se Guardaron Exitosamente");
+        }
+    }
+    // para cargar datos ll
+
+    private void cargarDatos() {
+        modelo.Usuario[] usuariosCargados = utilidades.Serializador.cargarUsuario();
+        if ( usuariosCargados != null) {
+            for (int i = 0; i < usuariosCargados.length && totalUsuarios < usuarios.length; i++) {
+                usuarios[totalUsuarios] = usuariosCargados[i];
+                totalUsuarios++;
+            }
+            System.out.println("Usuarios"+ usuariosCargados.length + "Usuarios Cargados.");
+        }
+
+        modelo.Producto[] productosCargados = utilidades.Serializador.cargarProductos();
+        if (productosCargados != null) {
+            for (int i = 0 ; i < productosCargados.length && totalProductos < productos.length; i++) {
+                productos[totalProductos] = productosCargados[i];
+                totalProductos++;
+            }
+            System.out.println("Productos" + productosCargados.length + "Productos Cargados");
+        }
     }
 }
