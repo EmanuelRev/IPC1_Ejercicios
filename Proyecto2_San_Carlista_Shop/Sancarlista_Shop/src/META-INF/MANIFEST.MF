@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Main-Class: main.Main
+Class-Path: commons-7.2.5.jar io-7.2.5.jar kernel-7.2.5.jar layout-7.2.5
+ .jar slf4j-api-1.7.36.jar
+

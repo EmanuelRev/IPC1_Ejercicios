@@ -5,7 +5,6 @@ import java.io.*;
 
 public class Serializador {
 
-    // para guardar datos
     public static boolean guardarDatos(String rutaArchivo, Object datos) {
         try {
             File archivo = new File(rutaArchivo);
@@ -44,7 +43,6 @@ public class Serializador {
             System.err.println("Error al Cargar Datos: " + e.getMessage());
             return null;
         }
-        // para guardar los usuarios ajaja
     }
 
     public static boolean guardarUsuarios(modelo.Usuario[] usuarios, int totalUsuarios) {
@@ -55,7 +53,6 @@ public class Serializador {
         return guardarDatos("datos/usuarios.ser", usuariosGuardar);
     }
 
-    // para cargarlos xdxdxd
     public static modelo.Usuario[] cargarUsuario() {
         Object datos = cargarDatos("datos/usuarios.ser");
         if (datos instanceof modelo.Usuario[]) {
@@ -64,7 +61,6 @@ public class Serializador {
         return null;
     }
 
-    // Guardar Productos
     public static boolean guardarProdcutos(modelo.Producto[] productos, int totalProductos) {
         modelo.Producto[] productosGuardar = new modelo.Producto[totalProductos];
         for (int i = 0; i < totalProductos; i++) {
@@ -80,5 +76,24 @@ public class Serializador {
         }
         return null;
     }
-}
 
+   // agregando los ultimos metods xxxxxx
+
+
+
+    public static boolean guardarPedidos(modelo.Pedido[] pedidos, int totalPedidos) {
+        modelo.Pedido[] pedidosGuardar = new modelo.Pedido[totalPedidos];
+        for (int i = 0; i < totalPedidos; i++) {
+            pedidosGuardar[i] = pedidos[i];
+        }
+        return guardarDatos("datos/pedidos.ser", pedidosGuardar);
+    }
+
+    public static modelo.Pedido[] cargarPedidos() {
+        Object datos = cargarDatos("datos/pedidos.ser");
+        if (datos instanceof modelo.Pedido[]) {
+            return (modelo.Pedido[]) datos;
+        }
+        return null;
+    }
+}

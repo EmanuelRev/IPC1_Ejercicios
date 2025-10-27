@@ -2,7 +2,6 @@ package modelo;
 
 import interfaces.OperacionesCRUD;
 import java.io.Serializable;
-import java.util.SplittableRandom;
 
 public abstract class Producto implements OperacionesCRUD , Serializable {
 
@@ -28,9 +27,16 @@ public abstract class Producto implements OperacionesCRUD , Serializable {
     public void setNombre(String nombre) { this.nombre = nombre; }
     public void setStock(int stock) { this.stock = stock; }
 
-    // esto lo añadi xxxxxx
     public abstract String getAtributoEspecifico();
     public abstract void setAtributoEspecifico(String valor);
+
+    // ✅ AGREGAR ESTE MÉTODO NUEVO:
+    public String getFechaCaducidad() {
+        if ("Alimento".equals(this.categoria)) {
+            return getAtributoEspecifico();
+        }
+        return "N/A";
+    }
 
     public String getInfoBasica() {
         return codigo + " | " + nombre + " | " + categoria + " | Stock: " + stock;

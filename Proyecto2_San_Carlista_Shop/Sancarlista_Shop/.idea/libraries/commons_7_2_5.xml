@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="commons-7.2.5">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Librerias/commons-7.2.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Librerias/io-7.2.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Librerias/kernel-7.2.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Librerias/layout-7.2.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/Librerias/slf4j-api-1.7.36.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

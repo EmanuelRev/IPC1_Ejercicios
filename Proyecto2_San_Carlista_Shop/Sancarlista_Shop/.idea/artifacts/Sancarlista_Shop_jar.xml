@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact build-on-make="true" name="Sancarlista_Shop:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Sancarlista_Shop_jar</output-path>
+    <root id="root">
+      <element id="archive" name="Sancarlista_Shop.jar">
+        <element id="module-output" name="Sancarlista_Shop" />
+      </element>
+      <element id="library" level="project" name="commons-7.2.5" />
+    </root>
+  </artifact>
+</component>

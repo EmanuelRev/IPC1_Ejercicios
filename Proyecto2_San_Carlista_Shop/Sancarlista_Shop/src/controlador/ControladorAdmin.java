@@ -2,31 +2,26 @@ package controlador;
 
 import modelo.Usuario;
 import modelo.Vendedor;
+import modelo.tipos.ReportesVentasVendedor;
 import vista.VistaActualizarVendedor;
 import vista.VistaAdmin;
 import vista.VistaGestionVendedores;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import utilidades.Validaciones;
 
-//Actualizando metodos
 public class ControladorAdmin {
 
-    // aqui coloco los atributos nuevos
     private vista.VistaGestionProductos vistaProductos;
     private modelo.Producto[] productos;
     private int totalProductos;
 
-    // aqui termino lo que estoy haciendo ajaja
-
     private VistaAdmin vistaAdmin;
     private VistaGestionVendedores vistaVendedores;
     private VistaActualizarVendedor vistaActualizarVendedor;
+    private vista.VistaBitacora vistaBitacora;
     private Usuario[] usuarios;
     private int totalUsuarios;
-
-// constructor
 
     public ControladorAdmin(vista.VistaAdmin vistaAdmin, modelo.Usuario[] usuarios, int totalUsuarios) {
         this.vistaAdmin = vistaAdmin;
@@ -62,9 +57,220 @@ public class ControladorAdmin {
                 abrirGestionProductos();
             }
         });
+
+        vistaAdmin.setReportesL(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                abrirReportes();
+            }
+        });
     }
 
-    // ------------------ PRODUCTOS ------------------
+    private void abrirReportes() {
+        vista.VistaReportes vistaReportes = new vista.VistaReportes();
+        configurarVistaReportes(vistaReportes);
+        vistaAdmin.ocultar();
+        vistaReportes.mostrar();
+    }
+
+    private void configurarVistaReportes(vista.VistaReportes vistaReportes) {
+        vistaReportes.setProductosMasVendidosListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                generarReporteProductosMasVendidos();
+            }
+        });
+
+        vistaReportes.setProductosMenosVendidosListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                generarReporteProductosMenosVendidos();
+            }
+        });
+
+        vistaReportes.setInventarioListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                generarReporteInventario();
+            }
+        });
+
+        vistaReportes.setVentasVendedorListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                generarReporteVentasVendedor();
+            }
+        });
+
+        vistaReportes.setFinancieroListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                generarReporteFinanciero();
+            }
+        });
+
+        vistaReportes.setProductosCaducarListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                generarReporteProductosCaducar();
+            }
+        });
+
+        vistaReportes.setRegresarListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                vistaReportes.ocultar();
+                vistaAdmin.mostrar();
+            }
+        });
+    }
+
+    private void generarReporteProductosMasVendidos() {
+        modelo.Pedido[] pedidosVacios = new modelo.Pedido[0];
+        modelo.tipos.ReporteProductosMasVendidos reporte = new modelo.tipos.ReporteProductosMasVendidos(productos, totalProductos, pedidosVacios, 0);
+        controlador.ControladorReportes.generarReporte(reporte);
+    }
+
+    private void generarReporteProductosMenosVendidos() {
+        modelo.Pedido[] pedidosVacios = new modelo.Pedido[0];
+        modelo.tipos.ReporteProductosMenosVendidos reporte = new modelo.tipos.ReporteProductosMenosVendidos(productos, totalProductos, pedidosVacios, 0);
+        controlador.ControladorReportes.generarReporte(reporte);
+    }
+
+    private void generarReporteInventario() {
+        modelo.tipos.ReporteInventario reporte = new modelo.tipos.ReporteInventario(productos, totalProductos);
+        controlador.ControladorReportes.generarReporte(reporte);
+    }
+
+    private void generarReporteVentasVendedor() {
+        modelo.Vendedor[] vendedoresVacios = new modelo.Vendedor[0];
+        modelo.Pedido[] pedidosVacios = new modelo.Pedido[0];
+        ReportesVentasVendedor reporte = new ReportesVentasVendedor(vendedoresVacios, 0, pedidosVacios, 0);
+        controlador.ControladorReportes.generarReporte(reporte);
+    }
+
+    private void generarReporteFinanciero() {
+        modelo.Pedido[] pedidosVacios = new modelo.Pedido[0];
+        modelo.tipos.ReporteFinanciero reporte = new modelo.tipos.ReporteFinanciero(productos, totalProductos, pedidosVacios, 0);
+        controlador.ControladorReportes.generarReporte(reporte);
+    }
+
+    private void generarReporteProductosCaducar() {
+        modelo.tipos.ReporteProductosCaducar reporte = new modelo.tipos.ReporteProductosCaducar(productos, totalProductos);
+        controlador.ControladorReportes.generarReporte(reporte);
+    }
+
+    private void abrirBitacora() {
+        vistaBitacora = new vista.VistaBitacora();
+        configurarListenersBitacora();
+        cargarBitacoraCompleta();
+        vistaAdmin.ocultar();
+        vistaBitacora.mostrar();
+    }
+
+    private void configurarListenersBitacora() {
+        vistaBitacora.setCargarCompletaListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cargarBitacoraCompleta();
+            }
+        });
+
+        vistaBitacora.setFiltrarFechaListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                filtrarBitacoraPorFecha();
+            }
+        });
+
+        vistaBitacora.setFiltrarUsuarioListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                filtrarBitacoraPorUsuario();
+            }
+        });
+
+        vistaBitacora.setExportarListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                exportarBitacora();
+            }
+        });
+
+        vistaBitacora.setRegresarListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                regresarAlMenuDesdeBitacora();
+            }
+        });
+    }
+
+    private void cargarBitacoraCompleta() {
+        String[] registros = utilidades.Bitacora.cargarBitacoraCompleta();
+        mostrarRegistrosEnVista(registros, "BITACORA COMPLETA DEL SISTEMA");
+    }
+
+    private void filtrarBitacoraPorFecha() {
+        String fechaInicio = vistaBitacora.getFechaInicio();
+        String fechaFin = vistaBitacora.getFechaFin();
+
+        if (fechaInicio.isEmpty() || fechaFin.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Ingrese ambas fechas para filtrar");
+            return;
+        }
+
+        String[] registros = utilidades.Bitacora.filtrarPorFecha(fechaInicio, fechaFin);
+        mostrarRegistrosEnVista(registros, "BITACORA FILTRADA POR FECHA: " + fechaInicio + " - " + fechaFin);
+    }
+
+    private void filtrarBitacoraPorUsuario() {
+        String tipoUsuario = vistaBitacora.getTipoUsuario();
+
+        if (tipoUsuario.equals("TODOS")) {
+            cargarBitacoraCompleta();
+            return;
+        }
+
+        String[] registros = utilidades.Bitacora.filtrarPorUsuario(tipoUsuario);
+        mostrarRegistrosEnVista(registros, "BITACORA FILTRADA POR USUARIO: " + tipoUsuario);
+    }
+
+    private void mostrarRegistrosEnVista(String[] registros, String titulo) {
+        StringBuilder contenido = new StringBuilder("=== " + titulo + " ===\n\n");
+
+        if (registros.length == 0) {
+            contenido.append("No se encontraron registros.\n");
+        } else {
+            for (int i = 0; i < registros.length; i++) {
+                contenido.append(registros[i]).append("\n");
+            }
+            contenido.append("\nTotal de registros: ").append(registros.length);
+        }
+
+        vistaBitacora.mostrarBitacora(contenido.toString());
+    }
+
+    private void exportarBitacora() {
+        String[] registros = utilidades.Bitacora.cargarBitacoraCompleta();
+
+        if (registros.length == 0) {
+            JOptionPane.showMessageDialog(null, "No hay registros para exportar");
+            return;
+        }
+
+        boolean exportado = utilidades.Bitacora.exportarBitacora("datos/bitacora_exportada.csv", registros);
+
+        if (exportado) {
+            JOptionPane.showMessageDialog(null, "Bitacora exportada exitosamente");
+        } else {
+            JOptionPane.showMessageDialog(null, "Error al exportar bitacora");
+        }
+    }
+
+    private void regresarAlMenuDesdeBitacora() {
+        vistaBitacora.ocultar();
+        vistaAdmin.mostrar();
+    }
 
     private void abrirGestionProductos() {
         System.out.println("Abriendo Gestion de Productos...");
@@ -84,12 +290,118 @@ public class ControladorAdmin {
                 crearProducto();
             }
         });
+
+        vistaProductos.setActualizarListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                actualizarProducto();
+            }
+        });
+
+        vistaProductos.setEliminarListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                eliminarProducto();
+            }
+        });
+
+        vistaProductos.setVerDetalleListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                verDetalleProducto();
+            }
+        });
+
         vistaProductos.setRegresarListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 regresarAlMenuProductos();
             }
         });
+    }
+
+    private void actualizarProducto() {
+        String codigo = JOptionPane.showInputDialog("Ingrese codigo del producto a actualizar:");
+        if (codigo == null || codigo.trim().isEmpty()) return;
+
+        modelo.Producto producto = buscarProducto(codigo);
+        if (producto == null) {
+            utilidades.Validaciones.mostrarError("Producto no encontrado");
+            return;
+        }
+
+        String nuevoNombre = JOptionPane.showInputDialog("Nuevo nombre:", producto.getNombre());
+        if (nuevoNombre == null) return;
+
+        String nuevoStockStr = JOptionPane.showInputDialog("Nuevo stock:", producto.getStock());
+        if (nuevoStockStr == null) return;
+
+        String nuevoAtributo = JOptionPane.showInputDialog("Nuevo atributo:", producto.getAtributoEspecifico());
+        if (nuevoAtributo == null) return;
+
+        int nuevoStock;
+        try {
+            nuevoStock = Integer.parseInt(nuevoStockStr);
+            if (nuevoStock < 0) throw new NumberFormatException();
+        } catch (NumberFormatException e) {
+            utilidades.Validaciones.mostrarError("Stock debe ser numero positivo");
+            return;
+        }
+
+        producto.setNombre(nuevoNombre);
+        producto.setStock(nuevoStock);
+        producto.setAtributoEspecifico(nuevoAtributo);
+
+        actualizarListaProductos();
+        utilidades.Validaciones.mostrarExito("Producto actualizado exitosamente");
+        utilidades.Bitacora.registrarOperacion("ADMIN", "admin", "ACTUALIZAR_PRODUCTO", "EXITOSO", "Producto: " + codigo);
+    }
+
+    private void eliminarProducto() {
+        String codigo = JOptionPane.showInputDialog("Ingrese codigo del producto a eliminar:");
+        if (codigo == null || codigo.trim().isEmpty()) return;
+
+        modelo.Producto producto = buscarProducto(codigo);
+        if (producto == null) {
+            utilidades.Validaciones.mostrarError("Producto no encontrado");
+            return;
+        }
+
+        if (utilidades.Validaciones.confirmarEliminacion(producto.getNombre())) {
+            for (int i = 0; i < totalProductos; i++) {
+                if (productos[i] != null && productos[i].getCodigo().equals(codigo)) {
+                    for (int j = i; j < totalProductos - 1; j++) {
+                        productos[j] = productos[j + 1];
+                    }
+                    productos[totalProductos - 1] = null;
+                    totalProductos--;
+                    actualizarListaProductos();
+                    utilidades.Validaciones.mostrarExito("Producto eliminado exitosamente");
+                    utilidades.Bitacora.registrarOperacion("ADMIN", "admin", "ELIMINAR_PRODUCTO", "EXITOSO", "Producto: " + codigo);
+                    return;
+                }
+            }
+        }
+    }
+
+    private void verDetalleProducto() {
+        String codigo = JOptionPane.showInputDialog("Ingrese codigo del producto para ver detalle:");
+        if (codigo == null || codigo.trim().isEmpty()) return;
+
+        modelo.Producto producto = buscarProducto(codigo);
+        if (producto == null) {
+            utilidades.Validaciones.mostrarError("Producto no encontrado");
+            return;
+        }
+
+        String mensaje = "Detalle del Producto:\n" +
+                "Codigo: " + producto.getCodigo() + "\n" +
+                "Nombre: " + producto.getNombre() + "\n" +
+                "Categoria: " + producto.getCategoria() + "\n" +
+                "Stock: " + producto.getStock() + "\n" +
+                "Atributo: " + producto.getAtributoEspecifico();
+
+        JOptionPane.showMessageDialog(null, mensaje, "Detalle Producto", JOptionPane.INFORMATION_MESSAGE);
     }
 
     private void crearProducto() {
@@ -99,7 +411,6 @@ public class ControladorAdmin {
         String stockStr = vistaProductos.getStock();
         String atributo = vistaProductos.getAtributo();
 
-        // validando todo
         if (codigo.isEmpty() || nombre.isEmpty() || stockStr.isEmpty() || atributo.isEmpty()) {
             utilidades.Validaciones.mostrarError("Todos los campos son Obligatorios");
             return;
@@ -177,8 +488,6 @@ public class ControladorAdmin {
         vistaAdmin.mostrar();
     }
 
-    // ------------------ VENDEDORES ------------------
-
     private void abrirGestionVendedores() {
         System.out.println("Abriendo Operaciones de Vendedores...");
         vistaVendedores = new VistaGestionVendedores();
@@ -203,7 +512,6 @@ public class ControladorAdmin {
             }
         });
 
-        // actualizando metodos x_xx
         vistaVendedores.setActualizarListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -344,6 +652,9 @@ public class ControladorAdmin {
         Vendedor nuevoVendedor = new Vendedor(codigo, nombre, genero, contrasenia);
         usuarios[totalUsuarios] = nuevoVendedor;
         totalUsuarios++;
+
+        utilidades.Bitacora.registrarOperacion("ADMIN","admin","Crear_Vendedor", "Exitos","Vendedor:" + codigo);
+
         vistaVendedores.limpiarFormulario();
         actualizarListaVendedores();
         JOptionPane.showMessageDialog(null, "Vendedor Creado Exitosamente:\n" + "Codigo: " + codigo + "\n" + "Nombre: " + nombre);
@@ -390,7 +701,7 @@ public class ControladorAdmin {
         guarDAtos();
 
         vistaAdmin.ocultar();
-        JOptionPane.showMessageDialog(null, "Sesion Cerrada-Datos Guardados :D");
+        controlador.ControladorLogin.getInstance().volverALogin();
     }
 
     private void cargarVendedoresDesdeCSV() {
@@ -413,7 +724,6 @@ public class ControladorAdmin {
         actualizarListaVendedores();
         JOptionPane.showMessageDialog(null, "Se Agregaron " + agregados + " Vendedores desde CSV");
     }
-    // guardando todos los datos
 
     private void guarDAtos() {
         boolean usuariosGuardados = utilidades.Serializador.guardarUsuarios(usuarios,totalUsuarios);
@@ -426,7 +736,6 @@ public class ControladorAdmin {
             System.out.println("Algunos Datos No se Guardaron Exitosamente");
         }
     }
-    // para cargar datos ll
 
     private void cargarDatos() {
         modelo.Usuario[] usuariosCargados = utilidades.Serializador.cargarUsuario();
@@ -448,3 +757,7 @@ public class ControladorAdmin {
         }
     }
 }
+
+
+
+

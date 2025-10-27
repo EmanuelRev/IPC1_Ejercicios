@@ -27,34 +27,30 @@ public class VistaAdmin {
         ventana.add(titulo, BorderLayout.NORTH);
 
         // PBP222
-        JPanel panelBotones = new JPanel(new GridLayout(3,1 ,10,10));
+        JPanel panelBotones = new JPanel(new GridLayout(4,1 ,10,10)); // Cambiado a 4,1
         panelBotones.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
         bGestionVendedores = new JButton("Gestion de Vendedores");
         bGestionProductos = new JButton("Gestion de Productos");
         bReportes = new JButton("Generar Reportes");
+        bCerrarSesion = new JButton("Cerrar Sesion"); // Movido aquí
 
         // ConfigB
         Font fuenteBotones = new Font("Arial", Font.BOLD, 16);
         bGestionVendedores.setFont(fuenteBotones);
         bGestionProductos.setFont(fuenteBotones);
         bReportes.setFont(fuenteBotones);
+        bCerrarSesion.setFont(fuenteBotones);
 
         // B panel XD
 
         panelBotones.add(bGestionVendedores);
         panelBotones.add(bGestionProductos);
         panelBotones.add(bReportes);
+        panelBotones.add(bCerrarSesion); // Agregado al panel
 
         ventana.add(panelBotones, BorderLayout.CENTER);
 
-        //BCSesion
-
-        bCerrarSesion = new JButton("Cerrar Sesion");
-        ventana.add(bCerrarSesion, BorderLayout.SOUTH);
-
         ventana.setLocationRelativeTo(null);
-
-
     }
     // m
     public void setGestionVendedoresL(ActionListener listener) {
@@ -77,5 +73,4 @@ public class VistaAdmin {
     public void ocultar() {
         ventana.setVisible(false);
     }
-
 }

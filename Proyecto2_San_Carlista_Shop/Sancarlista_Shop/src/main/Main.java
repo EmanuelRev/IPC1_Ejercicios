@@ -3,35 +3,34 @@ package main;
 import vista.Login;
 import controlador.ControladorLogin;
 import utilidades.HilosSistema;
-
-
+import javax.swing.*;
 
 public class Main {
+    public static void main(String[] args) {
+        System.out.println("Iniciando sistema...");
 
-    public static controlador.ControladorLogin controladorGlobal;
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                iniciarAplicacion();
+            }
+        });
+    }
 
+    private static void iniciarAplicacion() {
+        System.out.println("Iniciando interfaz...");
 
-    public static  void main(String[] args) {
-        System.out.println("Iniciando ING Shop...");
-
-        // aqui inicia todooo
         HilosSistema.iniciarHilos();
 
-        vista.Login vistaLogin = new vista.Login();
-        controladorGlobal = new controlador.ControladorLogin(vistaLogin);
-        controladorGlobal.iniciar();
+        try {
+            Login vistaLogin = new Login();
+            ControladorLogin controlador = new ControladorLogin(vistaLogin);
+            controlador.iniciar();
 
-        System.out.println("Sistema Iniciado Correctamente");
-
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            System.out.println("Cerrando ING Shop...");
-            HilosSistema.detenerHilos();
-
-            if (controladorGlobal != null) {
-                System.out.println("Guardando Datos...");
-            }
-
-      }));
-
+            System.out.println("Interfaz iniciada");
+        } catch (Exception e) {
+            System.err.println("Error: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

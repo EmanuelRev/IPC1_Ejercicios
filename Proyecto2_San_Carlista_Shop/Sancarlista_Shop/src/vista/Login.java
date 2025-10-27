@@ -44,7 +44,7 @@ public class Login {
         ventana.add(campoMensaje);
 
         ventana.setLocationRelativeTo(null);
-        ventana.setVisible(true);
+
     }
 
     public String getCodigo() {
@@ -69,8 +69,13 @@ public class Login {
     public void accesoListener(ActionListener listener){
         botonLogin.addActionListener(listener);
     }
+
+
+
     public void mostrar(){
+        System.out.println("Mostrando Ventrando ventana login..");
         ventana.setVisible(true);
+        System.out.println("Ventana Visible");
     }
 
     public void ocultar(){
@@ -83,4 +88,6 @@ public class Login {
         contrasenia.setText("");
         campoMensaje.setText("");
     }
+
+
 }

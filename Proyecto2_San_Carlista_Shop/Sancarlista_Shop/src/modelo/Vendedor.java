@@ -9,7 +9,7 @@ public class Vendedor extends Usuario implements  Serializable {
 
     // aqui le quite vendodero en super
     public Vendedor(String codigo, String nombre, String genero, String contrasenia) {
-        super(codigo, nombre, genero, contrasenia);
+        super(codigo, nombre, genero, contrasenia,"Vendedor");
         this.ventasConfirmadas = 0;
     }
 

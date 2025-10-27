@@ -3,9 +3,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-
-
-
 public class VistaGestionProductos {
     private JFrame ventana;
     private JTextField txtCodigo, txtNombre, txtStock, txtAtributo;
@@ -22,8 +19,6 @@ public class VistaGestionProductos {
         ventana.setSize(900, 500);
         ventana.setLayout(new BorderLayout());
 
-
-        // TOdo para la ventana
         JLabel titulo = new JLabel("Gestion de Productos", JLabel.CENTER);
         titulo.setFont(new Font("Arial", Font.BOLD, 18));
         ventana.add(titulo, BorderLayout.NORTH);
@@ -31,7 +26,6 @@ public class VistaGestionProductos {
         JPanel panelFormulario = new JPanel(new GridLayout(7,2,5,5));
         panelFormulario.setBorder(BorderFactory.createTitledBorder("Crear Producto"));
 
-        // Formulario
         panelFormulario.add(new JLabel("Codigo:"));
         txtCodigo = new JTextField();
         panelFormulario.add(txtCodigo);
@@ -52,8 +46,6 @@ public class VistaGestionProductos {
         txtAtributo = new JTextField();
         panelFormulario.add(txtAtributo);
 
-        // Botoneraaaaaaaaaaaaaaaaa
-
         btnCrear = new JButton("Crear Producto");
         panelFormulario.add(btnCrear);
 
@@ -68,7 +60,6 @@ public class VistaGestionProductos {
         JScrollPane scroll = new JScrollPane(areaProductos);
         panelLista.add(scroll, BorderLayout.CENTER);
 
-        //Botonera Gestion
         JPanel panelBotonesGestion = new JPanel(new GridLayout(1, 3));
         btnActualizar = new JButton("Actualizar");
         btnEliminar = new JButton("Eliminar");
@@ -87,18 +78,13 @@ public class VistaGestionProductos {
         ventana.add(btnRegresar, BorderLayout.SOUTH);
 
         ventana.setLocationRelativeTo(null);
-
-
     }
 
-    //  Metodos para todos los datos que se colocan jijiji
-    public  String getCodigo() {return txtCodigo.getText().trim(); }
+    public String getCodigo() {return txtCodigo.getText().trim(); }
     public String getNombre() {return txtNombre.getText().trim(); }
     public String getCategoria() {return (String) comboCategoria.getSelectedItem(); }
     public String getStock() {return txtStock.getText().trim(); }
     public String getAtributo() {return txtAtributo.getText().trim(); }
-
-    // limpiar datos x:x
 
     public void limpiarFormulario() {
         txtCodigo.setText("");
@@ -107,8 +93,6 @@ public class VistaGestionProductos {
         txtAtributo.setText("");
         comboCategoria.setSelectedIndex(0);
     }
-
-    // mostrar lo que ya hay :d
 
     public void mostrarProductos(String lista) {
         areaProductos.setText(lista);
@@ -133,5 +117,4 @@ public class VistaGestionProductos {
     }
     public void mostrar() {ventana.setVisible(true);}
     public void ocultar() {ventana.setVisible(false);}
-
 }

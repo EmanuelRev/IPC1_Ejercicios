@@ -13,9 +13,10 @@ public class Usuario implements Serializable {
     private String tipo;
     private int ventasConfirmadas;
 
-    public Usuario(String codigo, String nombre, String contrasenia, String tipo) {
+    public Usuario(String codigo, String nombre, String genero, String contrasenia, String tipo) {
         this.codigo = codigo;
         this.nombre = nombre;
+        this.genero = genero;
         this.contrasenia = contrasenia;
         this.tipo = tipo;
         this.ventasConfirmadas = 0;
@@ -41,7 +42,7 @@ public class Usuario implements Serializable {
         this.ventasConfirmadas++;
     }
 
-    public boolean verificarContraseia(String contraseniaIngresada) {
+    public boolean verificarContrasenia(String contraseniaIngresada) {
         return  this.contrasenia.equals(contraseniaIngresada) ;
     }
 
